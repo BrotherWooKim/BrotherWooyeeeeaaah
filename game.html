@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple 2D RPG Game</title>
+    <style>
+        canvas {
+            background-color: #f0f0f0;
+            display: block;
+            margin: 20px auto;
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="gameCanvas" width="500" height="500"></canvas>
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Player properties
+    const player = {
+        x: 50,
+        y: 50,
+        size: 30,
+        color: 'blue',
+        speed: 5
+    };
+
+    // Goal properties
+    const goal = {
+        x: 400,
+        y: 400,
+        size: 30,
+        color: 'green'
+    };
+
+    let message = "";
+
+    // Draw player and goal
+    function drawPlayer() {
+        ctx.fillStyle = player.color;
+        ctx.fillRect(player.x, player.y, player.size, player.size);
+    }
+
+    function drawGoal() {
+        ctx.fillStyle = goal.color;
+        ctx.fillRect(goal.x, goal.y, goal.size, goal.size);
+    }
+
+    // Check for collision between player and goal
+    function checkCollision() {
+        if (player.x < goal.x + goal.size &&
+            player.x + player.size > goal.x &&
+            player.y < goal.y + goal.size &&
+            player.y + player.size > goal.y) {
+            message = "축하합니다! 목표에 도달했습니다!";
+        }
+    }
+
+    // Update game state
+    function update() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawPlayer();
+        drawGoal();
+        checkCollision();
+
+        if (message) {
+            ctx.fillStyle = "black";
+            ctx.font = "20px Arial";
+            ctx.fillText(message, 100, 250);
+        }
+    }
+
+    // Move player based on key press
+    window.addEventListener('keydown', (e) => {
+        switch (e.key) {
+            case 'ArrowUp':
+                player.y -= player.speed;
+                break;
+            case 'ArrowDown':
+                player.y += player.speed;
+                break;
+            case 'ArrowLeft':
+                player.x -= player.speed;
+                break;
+            case 'ArrowRight':
+                player.x += player.speed;
+                break;
+        }
+        update();
+    });
+
+    update(); // Initial draw
+</script>
+
+</body>
+</html>
